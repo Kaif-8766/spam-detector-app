@@ -1,5 +1,4 @@
-# Step 1: Install dependencies
-!pip install pandas scikit-learn nltk joblib
+
 
 # Step 2: Import required libraries
 import pandas as pd
