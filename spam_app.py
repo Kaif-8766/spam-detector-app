@@ -40,7 +40,4 @@ model.fit(X_train, y_train)
 joblib.dump(model, 'spam_model.pkl')
 joblib.dump(vectorizer, 'vectorizer.pkl')
 
-# Step 8: Download the files to your computer
-from google.colab import files
-files.download('spam_model.pkl')
-files.download('vectorizer.pkl')
+
