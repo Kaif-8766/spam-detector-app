@@ -1,0 +1,43 @@
+# spam_app.py
+
+import streamlit as st
+import joblib
+import string
+import nltk
+import os
+from nltk.corpus import stopwords
+
+# Download NLTK stopwords (safe for deployment)
+nltk.download('stopwords')
+
+# Load model and vectorizer
+model = joblib.load('spam_model.pkl')
+vectorizer = joblib.load('vectorizer.pkl')
+
+# Preprocessing
+def clean_text(text):
+    text = text.lower()
+    text = ''.join([c for c in text if c not in string.punctuation])
+    words = text.split()
+    words = [word for word in words if word not in stopwords.words('english')]
+    return ' '.join(words)
+
+def predict_message(msg):
+    cleaned = clean_text(msg)
+    vectorized = vectorizer.transform([cleaned])
+    prediction = model.predict(vectorized)[0]
+    return prediction
+
+# Streamlit UI
+st.title("📩 Spam Detector App")
+msg = st.text_area("Enter a message")
+
+if st.button("Predict"):
+    if msg.strip() == "":
+        st.warning("Please enter a message.")
+    else:
+        result = predict_message(msg)
+        if result == 1:
+            st.error("🚫 This message is SPAM")
+        else:
+            st.success("✅ This message is NOT spam")
